@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #app {
+    @apply h-full w-full overflow-hidden;
+  }
+
+  body {
+    @apply m-0 font-sans text-sm text-win-black antialiased;
+    image-rendering: pixelated;
+  }
+}
+
+@layer components {
+  /* ── Efeito CRT Global ── */
+  .crt-overlay {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+  }
+
+  /* Scanlines horizontais */
+  .crt-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.12) 0px,
+      rgba(0, 0, 0, 0.12) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    opacity: 0.35;
+    animation: crt-flicker 8s infinite;
+  }
+
+  /* Vinheta + leve distorção analógica nas bordas */
+  .crt-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgba(0, 0, 0, 0.18) 85%,
+      rgba(0, 0, 0, 0.45) 100%
+    );
+    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Leve curvatura / aberration simulada via filtro no container pai */
+  .crt-screen {
+    filter: contrast(1.05) saturate(1.08);
+    transform: perspective(1200px) rotateX(0.4deg);
+    transform-origin: center center;
+  }
+
+  @keyframes crt-flicker {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    92% {
+      opacity: 0.35;
+    }
+    93% {
+      opacity: 0.28;
+    }
+    94% {
+      opacity: 0.38;
+    }
+    95% {
+      opacity: 0.32;
+    }
+  }
+
+  /* Botões clássicos Win95 */
+  .win-btn {
+    @apply bg-win-gray shadow-win-button active:shadow-win-button-pressed px-2 py-0.5 text-xs font-sans;
+  }
+
+  .win-btn-title {
+    @apply flex h-[18px] w-[18px] items-center justify-center bg-win-gray text-[10px] font-bold leading-none shadow-win-button active:shadow-win-button-pressed;
+  }
+
+  /* Ícone de atalho da área de trabalho */
+  .desktop-icon {
+    @apply flex w-[72px] cursor-pointer flex-col items-center gap-1 p-1 text-center transition-colors;
+  }
+
+  .desktop-icon:hover,
+  .desktop-icon:focus-visible {
+    @apply outline-none;
+    background: rgba(0, 0, 128, 0.35);
+    outline: 1px dotted #fff;
+  }
+
+  .desktop-icon-label {
+    @apply break-words font-sans text-[11px] leading-tight text-win-black;
+  }
+
+  .desktop-icon:hover .desktop-icon-label,
+  .desktop-icon:focus-visible .desktop-icon-label {
+    @apply text-white;
+    text-shadow: 1px 1px 0 #000;
+  }
+
+  /* Alças de redimensionamento Win95 */
+  .resize-handle {
+    position: absolute;
+    z-index: 20;
+  }
+
+  .resize-n {
+    top: -2px;
+    left: 6px;
+    right: 6px;
+    height: 6px;
+    cursor: n-resize;
+  }
+
+  .resize-s {
+    bottom: -2px;
+    left: 6px;
+    right: 6px;
+    height: 6px;
+    cursor: s-resize;
+  }
+
+  .resize-e {
+    top: 6px;
+    right: -2px;
+    bottom: 6px;
+    width: 6px;
+    cursor: e-resize;
+  }
+
+  .resize-w {
+    top: 6px;
+    left: -2px;
+    bottom: 6px;
+    width: 6px;
+    cursor: w-resize;
+  }
+
+  .resize-ne {
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    cursor: ne-resize;
+  }
+
+  .resize-nw {
+    top: -2px;
+    left: -2px;
+    width: 10px;
+    height: 10px;
+    cursor: nw-resize;
+  }
+
+  .resize-se {
+    right: -2px;
+    bottom: -2px;
+    width: 10px;
+    height: 10px;
+    cursor: se-resize;
+  }
+
+  .resize-sw {
+    left: -2px;
+    bottom: -2px;
+    width: 10px;
+    height: 10px;
+    cursor: sw-resize;
+  }
+}
