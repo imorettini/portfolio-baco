@@ -5,6 +5,7 @@ import ProfileWindow from './components/ProfileWindow.vue'
 import LinksWindow from './components/LinksWindow.vue'
 import ExperienceWindow from './components/ExperienceWindow.vue'
 import Taskbar from './components/Taskbar.vue'
+import MusicPlayer from './components/MusicPlayer.vue';
 import { useWindowManager } from './composables/useWindowManager.js'
 
 const WINDOW_DEFS = [
@@ -13,11 +14,22 @@ const WINDOW_DEFS = [
     title: 'Quem Sou Eu — Perfil & Bio',
     shortTitle: 'Perfil & Bio',
     icon: '👤',
-    defaultZ: 3,
+    defaultZ: 4,
     minWidth: 300,
     minHeight: 220,
     defaultBounds: { xPct: 0.02, yPct: 0.02, wPct: 0.46, hPct: 0.58 },
     mobileBounds: { xPct: 0.02, yPct: 0.02, wPct: 0.96, hPct: 0.36 },
+  },
+  {
+    id: 'winamp',
+    title: 'Winamp v2.95',
+    shortTitle: 'Winamp',
+    icon: '📻',
+    defaultZ: 3,
+    minWidth: 280,
+    minHeight: 230,
+    defaultBounds: { xPct: 0.02, yPct: 0.58, wPct: 0.46, hPct: 0.38 },
+    mobileBounds: { xPct: 0.02, yPct: 0.4, wPct: 0.96, hPct: 0.26 },
   },
   {
     id: 'links',
@@ -121,12 +133,36 @@ onUnmounted(() => {
         <ProfileWindow />
       </Win95Window>
 
+      <Win95Window
+        v-if="!getWindow('winamp')?.closed"
+        id="winamp"
+       :title="WINDOW_DEFS[1].title"
+        :icon="WINDOW_DEFS[1].icon"
+        :min-width="getDef('winamp')?.minWidth"
+        :min-height="getDef('winamp')?.minHeight"
+        :minimized="getWindow('winamp')?.minimized ?? false"
+        :maximized="getWindow('winamp')?.maximized ?? false"
+        :active="getWindow('winamp')?.active ?? false"
+        :z-index="getWindow('winamp')?.zIndex ?? 1"
+        :x="getWindow('winamp')?.x ?? 0"
+        :y="getWindow('winamp')?.y ?? 0"
+        :width="getWindow('winamp')?.width ?? 300"
+        :height="getWindow('winamp')?.height ?? 250"
+        @focus="focus"
+        @minimize="minimize"
+        @maximize="onMaximize"
+        @close="close"
+        @update-bounds="onUpdateBounds"
+      >
+        <MusicPlayer />
+      </Win95Window>
+
       <!-- Links -->
       <Win95Window
         v-if="!getWindow('links')?.closed"
         id="links"
-        :title="WINDOW_DEFS[1].title"
-        :icon="WINDOW_DEFS[1].icon"
+        :title="WINDOW_DEFS[2].title"
+        :icon="WINDOW_DEFS[2].icon"
         :min-width="getDef('links')?.minWidth"
         :min-height="getDef('links')?.minHeight"
         :minimized="getWindow('links')?.minimized ?? false"
@@ -150,8 +186,8 @@ onUnmounted(() => {
       <Win95Window
         v-if="!getWindow('experience')?.closed"
         id="experience"
-        :title="WINDOW_DEFS[2].title"
-        :icon="WINDOW_DEFS[2].icon"
+        :title="WINDOW_DEFS[3].title"
+        :icon="WINDOW_DEFS[3].icon"
         :min-width="getDef('experience')?.minWidth"
         :min-height="getDef('experience')?.minHeight"
         :minimized="getWindow('experience')?.minimized ?? false"
