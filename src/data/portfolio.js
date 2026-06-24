@@ -28,6 +28,12 @@ export const socialLinks = [
     icon: "💼",
   },
   {
+    id: "codepen",
+    label: "CodePen",
+    url: "https://codepen.io/iMorettini",
+    icon: "✏️​",
+  },
+  {
     id: "email",
     label: "E-mail",
     url: "mailto:imorettini@gmail.com",
