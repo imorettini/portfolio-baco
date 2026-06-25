@@ -17,7 +17,7 @@ const WINDOW_DEFS = [
     defaultZ: 4,
     minWidth: 300,
     minHeight: 220,
-    defaultBounds: { xPct: 0.02, yPct: 0.02, wPct: 0.46, hPct: 0.58 },
+    defaultBounds: { xPct: 0.02, yPct: 0.02, wPct: 0.46, hPct: 0.54 },
     mobileBounds: { xPct: 0.02, yPct: 0.02, wPct: 0.96, hPct: 0.36 },
   },
   {
@@ -29,29 +29,29 @@ const WINDOW_DEFS = [
     minWidth: 280,
     minHeight: 230,
     defaultBounds: { xPct: 0.02, yPct: 0.58, wPct: 0.46, hPct: 0.38 },
-    mobileBounds: { xPct: 0.02, yPct: 0.4, wPct: 0.96, hPct: 0.26 },
-  },
-  {
-    id: 'links',
-    title: 'Atalhos de Rede',
-    shortTitle: 'Atalhos',
-    icon: '🌐',
-    defaultZ: 2,
-    minWidth: 260,
-    minHeight: 180,
-    defaultBounds: { xPct: 0.5, yPct: 0.02, wPct: 0.48, hPct: 0.32 },
-    mobileBounds: { xPct: 0.02, yPct: 0.4, wPct: 0.96, hPct: 0.26 },
+    mobileBounds: { xPct: 0.02, yPct: 0.40, wPct: 0.96, hPct: 0.26 },
   },
   {
     id: 'experience',
     title: 'Histórico do Sistema — Experiências',
     shortTitle: 'Experiências',
     icon: '📋',
-    defaultZ: 1,
+    defaultZ: 2,
     minWidth: 300,
     minHeight: 200,
-    defaultBounds: { xPct: 0.5, yPct: 0.36, wPct: 0.48, hPct: 0.6 },
+    defaultBounds: { xPct: 0.5, yPct: 0.02, wPct: 0.48, hPct: 0.68 }, 
     mobileBounds: { xPct: 0.02, yPct: 0.68, wPct: 0.96, hPct: 0.3 },
+  },
+  {
+    id: 'links',
+    title: 'Atalhos de Rede',
+    shortTitle: 'Atalhos',
+    icon: '🌐',
+    defaultZ: 1,
+    minWidth: 260,
+    minHeight: 120,
+    defaultBounds: { xPct: 0.5, yPct: 0.72, wPct: 0.48, hPct: 0.14 }, 
+    mobileBounds: { xPct: 0.02, yPct: 0.40, wPct: 0.96, hPct: 0.26 },
   },
 ]
 
@@ -92,7 +92,13 @@ function relayoutDesktop() {
 
 onMounted(() => {
   relayoutDesktop()
-  focus('profile')
+  // Se a tela for menor que 768px (celular/tablet pequeno), fecha as janelas densas
+  if (window.innerWidth < 768) {
+    close('winamp')
+    focus('profile')
+  } else {
+    focus('profile')
+  }
 
   window.addEventListener('resize', relayoutDesktop)
 })

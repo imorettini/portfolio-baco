@@ -34,6 +34,12 @@ export const socialLinks = [
     icon: "✏️​",
   },
   {
+    id: "behance",
+    label: "Behance",
+    url: "behance.net/imorettini",
+    icon: "🎨",
+  },
+  {
     id: "email",
     label: "E-mail",
     url: "mailto:imorettini@gmail.com",
@@ -72,9 +78,9 @@ export const experiences = [
   },
   {
     id: "exp-5",
-    period: "2015 — 2016",
-    role: "Instrutor de Artes Visuais (Projeto Viva Meninas)",
-    company: "Prefeitura Municipal de Sorocaba",
-    description: `Atuação no projeto social municipal voltado ao empoderamento de jovens em situação de vulnerabilidade. Responsável pela instrução técnica de artes visuais (estêncil e serigrafia), utilizando a arte como ferramenta de desenvolvimento criativo, expressão e inclusão social.`,
+    period: "2015",
+    role: "Curador de Arte e Eventos",
+    company: "Café Livramento",
+    description: `Responsável pela curadoria artística e organização de eventos culturais. Atuação na articulação entre artistas locais e a comunidade, promovendo exposições, saraus e workshops, fortalecendo a cena cultural e a gestão de experiências coletivas.`,
   },
 ];
