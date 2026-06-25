@@ -142,6 +142,7 @@ function onTitleDoubleClick() {
     :style="windowStyle"
     :aria-hidden="minimized"
     @mousedown="onFocus"
+    @touchstart.passive="onFocus"
   >
     <!-- Barra de título (arrastar) -->
     <header
@@ -153,6 +154,7 @@ function onTitleDoubleClick() {
       "
       @mousedown="onTitleMouseDown"
       @dblclick="onTitleDoubleClick"
+      @touchstart.passive="onTitleMouseDown"
     >
       <div class="flex min-w-0 flex-1 items-center gap-1.5 px-0.5">
         <span class="shrink-0 text-xs" aria-hidden="true">{{ icon }}</span>

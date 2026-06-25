@@ -11,6 +11,14 @@ export function useWindowInteraction({
   let dragSession = null
   let resizeSession = null
 
+  // Função auxiliar para pegar as coordenadas tanto do Mouse quanto do Touch
+  function getClientPos(event) {
+    if (event.touches && event.touches.length > 0) {
+      return { x: event.touches[0].clientX, y: event.touches[0].clientY }
+    }
+    return { x: event.clientX, y: event.clientY }
+  }
+
   function stopInteraction() {
     dragSession = null
     resizeSession = null
@@ -18,13 +26,19 @@ export function useWindowInteraction({
     document.body.style.cursor = ''
     window.removeEventListener('mousemove', onMouseMove)
     window.removeEventListener('mouseup', onMouseUp)
+    window.removeEventListener('touchmove', onMouseMove)
+    window.removeEventListener('touchend', onMouseUp)
   }
 
   function onMouseMove(event) {
+    if (!dragSession && !resizeSession) return
+
+    const pos = getClientPos(event)
+
     if (dragSession) {
       const desktop = getDesktopRect()
-      const nextX = event.clientX - dragSession.offsetX - desktop.left
-      const nextY = event.clientY - dragSession.offsetY - desktop.top
+      const nextX = pos.x - dragSession.offsetX - desktop.left
+      const nextY = pos.y - dragSession.offsetY - desktop.top
 
       onUpdate({
         x: Math.max(0, Math.min(nextX, desktop.width - dragSession.width)),
@@ -37,8 +51,8 @@ export function useWindowInteraction({
 
     if (resizeSession) {
       const desktop = getDesktopRect()
-      const dx = event.clientX - resizeSession.startX
-      const dy = event.clientY - resizeSession.startY
+      const dx = pos.x - resizeSession.startX
+      const dy = pos.y - resizeSession.startY
       let { x, y, width, height } = resizeSession.startBounds
 
       const { direction } = resizeSession
@@ -83,43 +97,51 @@ export function useWindowInteraction({
   }
 
   function startDrag(event, windowEl) {
-    if (event.button !== 0) return
+    if (event.type === 'mousedown' && event.button !== 0) return
 
     onFocus()
     const bounds = getBounds()
+    const pos = getClientPos(event)
     const desktop = getDesktopRect()
     const rect = windowEl.getBoundingClientRect()
 
     dragSession = {
-      offsetX: event.clientX - rect.left,
-      offsetY: event.clientY - rect.top,
+      offsetX: pos.x - rect.left,
+      offsetY: pos.y - rect.top,
       width: bounds.width,
       height: bounds.height,
     }
 
     document.body.style.userSelect = 'none'
     document.body.style.cursor = 'move'
-    window.addEventListener('mousemove', onMouseMove)
+    
+    // Escuta eventos de mouse e touch
+    window.addEventListener('mousemove', onMouseMove, { passive: false })
     window.addEventListener('mouseup', onMouseUp)
-
-    event.preventDefault()
+    window.addEventListener('touchmove', onMouseMove, { passive: false })
+    window.addEventListener('touchend', onMouseUp)
   }
 
   function startResize(event, direction) {
-    if (event.button !== 0) return
+    if (event.type === 'mousedown' && event.button !== 0) return
 
     onFocus()
+    const pos = getClientPos(event)
+    
     resizeSession = {
       direction,
-      startX: event.clientX,
-      startY: event.clientY,
+      startX: pos.x,
+      startY: pos.y,
       startBounds: { ...getBounds() },
     }
 
     document.body.style.userSelect = 'none'
     document.body.style.cursor = `${direction}-resize`
-    window.addEventListener('mousemove', onMouseMove)
+    
+    window.addEventListener('mousemove', onMouseMove, { passive: false })
     window.addEventListener('mouseup', onMouseUp)
+    window.addEventListener('touchmove', onMouseMove, { passive: false })
+    window.addEventListener('touchend', onMouseUp)
 
     event.preventDefault()
     event.stopPropagation()
