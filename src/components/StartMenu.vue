@@ -26,12 +26,12 @@ function openWindow(id) {
         class="flex w-7 shrink-0 items-end bg-gradient-to-b from-win-title to-win-title-active p-1"
         aria-hidden="true"
       >
-        <span
+     <!--    <span
           class="mb-1 origin-bottom-left -rotate-90 whitespace-nowrap font-bold text-white"
           style="writing-mode: vertical-rl"
         >
           Windows&nbsp;95
-        </span>
+        </span> -->
       </div>
 
       <div class="min-w-0 flex-1 py-1">

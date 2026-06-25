@@ -1,19 +1,19 @@
 <script setup>
-import { onMounted, onUnmounted, provide, ref } from 'vue'
-import Win95Window from './components/Win95Window.vue'
-import ProfileWindow from './components/ProfileWindow.vue'
-import LinksWindow from './components/LinksWindow.vue'
-import ExperienceWindow from './components/ExperienceWindow.vue'
-import Taskbar from './components/Taskbar.vue'
-import MusicPlayer from './components/MusicPlayer.vue';
-import { useWindowManager } from './composables/useWindowManager.js'
+import { onMounted, onUnmounted, provide, ref } from "vue";
+import Win95Window from "./components/Win95Window.vue";
+import ProfileWindow from "./components/ProfileWindow.vue";
+import LinksWindow from "./components/LinksWindow.vue";
+import ExperienceWindow from "./components/ExperienceWindow.vue";
+import Taskbar from "./components/Taskbar.vue";
+import MusicPlayer from "./components/MusicPlayer.vue";
+import { useWindowManager } from "./composables/useWindowManager.js";
 
 const WINDOW_DEFS = [
   {
-    id: 'profile',
-    title: 'Quem Sou Eu — Perfil & Bio',
-    shortTitle: 'Perfil & Bio',
-    icon: '👤',
+    id: "profile",
+    title: "Quem Sou Eu — Perfil & Bio",
+    shortTitle: "Perfil & Bio",
+    icon: "👤",
     defaultZ: 4,
     minWidth: 300,
     minHeight: 220,
@@ -21,42 +21,42 @@ const WINDOW_DEFS = [
     mobileBounds: { xPct: 0.02, yPct: 0.02, wPct: 0.96, hPct: 0.36 },
   },
   {
-    id: 'winamp',
-    title: 'Winamp v2.95',
-    shortTitle: 'Winamp',
-    icon: '📻',
+    id: "winamp",
+    title: "Winamp v2.95",
+    shortTitle: "Winamp",
+    icon: "📻",
     defaultZ: 3,
     minWidth: 280,
     minHeight: 230,
     defaultBounds: { xPct: 0.02, yPct: 0.58, wPct: 0.46, hPct: 0.38 },
-    mobileBounds: { xPct: 0.02, yPct: 0.40, wPct: 0.96, hPct: 0.26 },
+    mobileBounds: { xPct: 0.02, yPct: 0.4, wPct: 0.96, hPct: 0.26 },
   },
   {
-    id: 'experience',
-    title: 'Histórico do Sistema — Experiências',
-    shortTitle: 'Experiências',
-    icon: '📋',
+    id: "experience",
+    title: "Histórico do Sistema — Experiências",
+    shortTitle: "Experiências",
+    icon: "📋",
     defaultZ: 2,
     minWidth: 300,
     minHeight: 200,
-    defaultBounds: { xPct: 0.5, yPct: 0.02, wPct: 0.48, hPct: 0.68 }, 
+    defaultBounds: { xPct: 0.5, yPct: 0.02, wPct: 0.48, hPct: 0.68 },
     mobileBounds: { xPct: 0.02, yPct: 0.68, wPct: 0.96, hPct: 0.3 },
   },
   {
-    id: 'links',
-    title: 'Atalhos de Rede',
-    shortTitle: 'Atalhos',
-    icon: '🌐',
+    id: "links",
+    title: "Atalhos de Rede",
+    shortTitle: "Atalhos",
+    icon: "🌐",
     defaultZ: 1,
     minWidth: 260,
     minHeight: 120,
-    defaultBounds: { xPct: 0.5, yPct: 0.72, wPct: 0.48, hPct: 0.14 }, 
-    mobileBounds: { xPct: 0.02, yPct: 0.40, wPct: 0.96, hPct: 0.26 },
+    defaultBounds: { xPct: 0.5, yPct: 0.72, wPct: 0.48, hPct: 0.14 },
+    mobileBounds: { xPct: 0.02, yPct: 0.4, wPct: 0.96, hPct: 0.26 },
   },
-]
+];
 
-const desktopRef = ref(null)
-provide('desktopRef', desktopRef)
+const desktopRef = ref(null);
+provide("desktopRef", desktopRef);
 
 const {
   windows,
@@ -68,44 +68,44 @@ const {
   toggleTaskbar,
   layoutWindows,
   updateBounds,
-} = useWindowManager(WINDOW_DEFS)
+} = useWindowManager(WINDOW_DEFS);
 
 function getWindow(id) {
-  return windows.value.find((w) => w.id === id)
+  return windows.value.find((w) => w.id === id);
 }
 
 function getDef(id) {
-  return WINDOW_DEFS.find((w) => w.id === id)
+  return WINDOW_DEFS.find((w) => w.id === id);
 }
 
 function onMaximize(id) {
-  maximize(id, desktopRef.value)
+  maximize(id, desktopRef.value);
 }
 
 function onUpdateBounds(id, bounds) {
-  updateBounds(id, bounds, desktopRef.value)
+  updateBounds(id, bounds, desktopRef.value);
 }
 
 function relayoutDesktop() {
-  layoutWindows(desktopRef.value)
+  layoutWindows(desktopRef.value);
 }
 
 onMounted(() => {
-  relayoutDesktop()
+  relayoutDesktop();
   // Se a tela for menor que 768px (celular/tablet pequeno), fecha as janelas densas
   if (window.innerWidth < 768) {
-    close('winamp')
-    focus('profile')
+    close("winamp");
+    focus("profile");
   } else {
-    focus('profile')
+    focus("profile");
   }
 
-  window.addEventListener('resize', relayoutDesktop)
-})
+  window.addEventListener("resize", relayoutDesktop);
+});
 
 onUnmounted(() => {
-  window.removeEventListener('resize', relayoutDesktop)
-})
+  window.removeEventListener("resize", relayoutDesktop);
+});
 </script>
 
 <template>
@@ -138,11 +138,11 @@ onUnmounted(() => {
       >
         <ProfileWindow />
       </Win95Window>
-
+      <!-- Player -->
       <Win95Window
         v-if="!getWindow('winamp')?.closed"
         id="winamp"
-       :title="WINDOW_DEFS[1].title"
+        :title="WINDOW_DEFS[1].title"
         :icon="WINDOW_DEFS[1].icon"
         :min-width="getDef('winamp')?.minWidth"
         :min-height="getDef('winamp')?.minHeight"
@@ -167,8 +167,8 @@ onUnmounted(() => {
       <Win95Window
         v-if="!getWindow('links')?.closed"
         id="links"
-        :title="WINDOW_DEFS[2].title"
-        :icon="WINDOW_DEFS[2].icon"
+        :title="WINDOW_DEFS[3].title"
+        :icon="WINDOW_DEFS[3].icon"
         :min-width="getDef('links')?.minWidth"
         :min-height="getDef('links')?.minHeight"
         :minimized="getWindow('links')?.minimized ?? false"
@@ -192,8 +192,8 @@ onUnmounted(() => {
       <Win95Window
         v-if="!getWindow('experience')?.closed"
         id="experience"
-        :title="WINDOW_DEFS[3].title"
-        :icon="WINDOW_DEFS[3].icon"
+        :title="WINDOW_DEFS[2].title"
+        :icon="WINDOW_DEFS[2].icon"
         :min-width="getDef('experience')?.minWidth"
         :min-height="getDef('experience')?.minHeight"
         :minimized="getWindow('experience')?.minimized ?? false"
@@ -218,7 +218,9 @@ onUnmounted(() => {
         class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-2 font-mono text-sm text-white"
       >
         <p>Nenhuma janela aberta.</p>
-        <p class="text-xs opacity-80">Clique em <strong>Iniciar</strong> para abrir um programa.</p>
+        <p class="text-xs opacity-80">
+          Clique em <strong>Iniciar</strong> para abrir um programa.
+        </p>
       </div>
     </main>
 
